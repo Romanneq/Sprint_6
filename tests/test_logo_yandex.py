@@ -1,10 +1,7 @@
 import allure
-import data
 from selenium import webdriver
-from locators.locators_main_page import LocatorsMainPage
-from locators.locators_main_page import LocatorsDzen
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+from pages.main_page import MainPageSamokat
+from pages.Dzen_page import DzenPage
 
 
 
@@ -18,18 +15,17 @@ class TestLogoYandex:
 
     @allure.title('Проверка логотипа, клик по Яндекс')
     def test_logo_yandex_yandex(self):
-        self.driver.get(data.URL)
-        self.driver.find_element(*LocatorsMainPage.logo_yandex_yandex).click()
-        self.driver.switch_to.window(self.driver.window_handles[1])
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(LocatorsDzen.logo_yandex_dzen))
-        assert self.driver.find_element(*LocatorsDzen.logo_yandex_dzen).is_displayed()
+        main_page_obj = MainPageSamokat(self.driver)
+        dzen_page_obj = DzenPage(self.driver)
+        main_page_obj.click_logo_yandex_yandex()
+        dzen_page_obj.display_element_page_dzen()
+        assert dzen_page_obj.found_element_page_dzen()
 
     @allure.title('Проверка логотипа, клик по Самокат')
     def test_logo_yandex_samokat(self):
-        self.driver.get(data.URL)
-        self.driver.find_element(*LocatorsMainPage.logo_yandex_samokat).click()
-        WebDriverWait(self.driver,3).until(expected_conditions.visibility_of_element_located(LocatorsMainPage.locator_main_page))
-        assert self.driver.find_element(*LocatorsMainPage.locator_main_page).is_displayed()
+        main_page_obj = MainPageSamokat(self.driver)
+        main_page_obj.click_logo_yandex_samokat()
+        assert main_page_obj.display_main_page()
 
     @classmethod
     def teardown_class(cls):

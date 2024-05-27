@@ -1,27 +1,41 @@
-from selenium.webdriver.support import expected_conditions
-from selenium.webdriver.support.wait import WebDriverWait
+import allure
 from locators.locators_main_page import LocatorsMainPage
-from locators.locators_order_scooter_form_who_is_the_scooter import LocatorsOrderPageWhoIsTheScooter
+from pages.BasePage import BasePage
 
 
 
-class MainPageSamokat: # Создали класс главной страницы cервиса
+class MainPageSamokat(BasePage): # Создали класс главной страницы cервиса
 
     def __init__(self, driver):
         self.driver = driver
 
-    def scroll_main_page(self): # метод скролла до футера страницы "Вопросы о важном"
-        element = self.driver.find_element(*LocatorsMainPage.text_footer)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located((LocatorsMainPage.text_footer)))
+    @allure.step('Метод скролла до футера страницы и отображение текста ответа на "Вопросы о важном"')
+    def click_and_found_text(self, obj_q, obj_a):
+        super().url_page()
+        super().base_scroll_page(LocatorsMainPage.questions_about_important)
+        super().click_element_page(obj_q)
+        return super().base_text_element(obj_a)
 
-    def click_on_button_order_in_header_page(self): # метод клика на кнопку "Заказать" в заголовке страницы
-        self.driver.find_element(*LocatorsMainPage.button_order_in_header).click()
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(LocatorsOrderPageWhoIsTheScooter.text_form_who_is_the_scooter_for))
+    @allure.step('Метод клика на кнопку "Заказать" в рабочей области страницы')
+    def click_button_order_in_work_page(self):
+        super().url_page()
+        super().base_scroll_page(LocatorsMainPage.button_order_in_work_area)
+        super().click_element_page(LocatorsMainPage.button_order_in_work_area)
 
-    def click_on_button_order_in_work_area_page(self): # метод клика на кнопку "Заказать" в рабочей области страницы
-        element = self.driver.find_element(*LocatorsMainPage.button_order_in_work_area)
-        self.driver.execute_script("arguments[0].scrollIntoView();", element)
-        WebDriverWait(self.driver, 3).until(expected_conditions.element_to_be_clickable(LocatorsMainPage.button_order_in_work_area))
-        self.driver.find_element(*LocatorsMainPage.button_order_in_work_area).click()
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(LocatorsOrderPageWhoIsTheScooter.text_form_who_is_the_scooter_for))
+    @allure.step('Метод клика на кнопку заказать в шапке страницы')
+    def click_button_order_in_header_page(self):
+        super().url_page()
+        super().click_element_page(LocatorsMainPage.button_order_in_header)
+    @allure.step('Метод клика на "Яндекс" логотипа "Яндекс.Самокат"')
+    def click_logo_yandex_yandex(self):
+        super().url_page()
+        super().click_element_page(LocatorsMainPage.logo_yandex_yandex)
+        super().swith_another_tab()
+    @allure.step('Метод клика на "Самокат" логотипа "Яндекс.Самокат"')
+    def click_logo_yandex_samokat(self):
+        super().url_page()
+        super().click_element_page(LocatorsMainPage.logo_yandex_samokat)
+        super().wait_element_page(LocatorsMainPage.locator_main_page)
+    @allure.step('Метод отображения элемента на главной странице сервиса"')
+    def display_main_page(self):
+        return super().display_element_page(LocatorsMainPage.locator_main_page)
